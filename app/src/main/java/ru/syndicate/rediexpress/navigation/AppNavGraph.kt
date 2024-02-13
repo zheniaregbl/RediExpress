@@ -32,8 +32,8 @@ fun AppNavGraph(
     NavHost(
         navController = navController,
         startDestination = ScreenRoute.SplashScreen.route,
-        /*enterTransition = { EnterTransition.None },
-        exitTransition = { ExitTransition.None }*/
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None }
     ) {
 
         composable(
@@ -89,7 +89,17 @@ fun AppNavGraph(
 
             OnboardingScreen(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .fillMaxSize(),
+                navigateToSignIn = {
+                    navController.navigate(ScreenRoute.AuthScreen.route) {
+                        popUpTo(0)
+                    }
+                },
+                navigateToSignUp = {
+                    navController.navigate(ScreenRoute.RegisterScreen.route) {
+                        popUpTo(0)
+                    }
+                }
             )
         }
 

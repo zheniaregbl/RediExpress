@@ -43,9 +43,6 @@ fun ServiceCard(
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
 
-    /*val density = LocalDensity.current.density
-    var padding by remember { mutableStateOf(0.dp) }*/
-
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(8.dp))
@@ -93,13 +90,7 @@ fun ServiceCard(
             fontWeight = FontWeight.Medium,
             fontSize = 10.sp,
             color = if (isPressed) Color.White else TextBlack,
-            lineHeight = 10.sp,
-            /*onTextLayout = {
-                val lineCount = it.lineCount
-                val height = (it.size.height / density).dp
-
-                padding = if (lineCount > 1) 0.dp else height
-            }*/
+            lineHeight = 10.sp
         )
     }
 }

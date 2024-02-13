@@ -44,7 +44,9 @@ import ru.syndicate.rediexpress.ui.theme.MainBlue
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateToSignUp: () -> Unit = { },
+    navigateToSignIn: () -> Unit = { }
 ) {
 
     val scope = rememberCoroutineScope()
@@ -74,19 +76,16 @@ fun OnboardingScreen(
     )
 
     Box(
-        modifier = modifier
+        modifier = modifier,
+        contentAlignment = Alignment.Center
     ) {
 
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-
-            Spacer(
-                modifier = Modifier
-                    .height(56.dp)
-            )
 
             HorizontalPager(
                 state = pagerState
@@ -202,7 +201,7 @@ fun OnboardingScreen(
                                 color = MainBlue
                             )
                             .clickable {
-
+                                navigateToSignUp()
                             }
                             .padding(
                                 vertical = 15.dp
@@ -242,7 +241,7 @@ fun OnboardingScreen(
                                 text = "Sign in"
                             ),
                             onClick = {
-
+                                navigateToSignIn()
                             },
                             style = TextStyle(
                                 fontFamily = MaterialTheme.typography.bodyMedium.fontFamily,
