@@ -1,6 +1,6 @@
 package ru.syndicate.rediexpress.ui.screens.register_screen
 
-import androidx.compose.animation.core.tween
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -24,7 +25,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -34,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -54,15 +55,16 @@ import ru.syndicate.rediexpress.ui.theme.CustomGray
 import ru.syndicate.rediexpress.ui.theme.CustomYellow
 import ru.syndicate.rediexpress.ui.theme.MainBlue
 import ru.syndicate.rediexpress.ui.theme.TextBlack
-import ru.syndicate.rediexpress.ui.utils.rememberImeState
 
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
-    navigateToLogIn: () -> Unit = { }
+    navigateToLogIn: () -> Unit = { },
+    onSignUp: () -> Unit = { }
 ) {
 
-    val imeState = rememberImeState()
+    val context = LocalContext.current
+
     val scrollState = rememberScrollState()
 
     var fullNameText by remember {
@@ -82,11 +84,6 @@ fun RegisterScreen(
         mutableStateOf(false)
     }
 
-    LaunchedEffect(imeState.value) {
-        if (imeState.value)
-            scrollState.animateScrollTo(scrollState.maxValue, tween(200))
-    }
-
     Box(
         modifier = modifier
     ) {
@@ -99,7 +96,8 @@ fun RegisterScreen(
                 )
                 .verticalScroll(
                     scrollState
-                ),
+                )
+                .imePadding(),
             verticalArrangement = Arrangement.Center
         ) {
 
@@ -107,7 +105,8 @@ fun RegisterScreen(
                 modifier = Modifier
                     .padding(
                         top = 36.dp
-                    )
+                    ),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
 
                 Text(
@@ -372,7 +371,21 @@ fun RegisterScreen(
                         color = MainBlue
                     )
                     .clickable {
+                        if (fullNameText.isNotEmpty() && phoneText.isNotEmpty()
+                            && emailText.isNotEmpty() && passwordText.isNotEmpty()) {
 
+                            onSignUp()
+
+                        } else {
+
+                            Toast
+                                .makeText(
+                                    context,
+                                    "Entry all info",
+                                    Toast.LENGTH_LONG
+                                )
+                                .show()
+                        }
                     }
                     .padding(
                         vertical = 15.dp

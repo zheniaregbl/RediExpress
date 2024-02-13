@@ -41,12 +41,12 @@ fun RediExpressTheme(
         SideEffect {
             val window = (view.context as Activity).window
 
-            window.statusBarColor = Color.Blue.toArgb()
+            window.statusBarColor = Color.White.toArgb()
             window.navigationBarColor = Color.Blue.toArgb()
 
             WindowCompat
                 .getInsetsController(window, view)
-                .isAppearanceLightStatusBars = darkTheme
+                .isAppearanceLightStatusBars = !darkTheme
             WindowCompat
                 .getInsetsController(window, view)
                 .isAppearanceLightNavigationBars = darkTheme

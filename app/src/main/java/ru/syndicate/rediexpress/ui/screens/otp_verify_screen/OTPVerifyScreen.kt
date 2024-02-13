@@ -1,8 +1,8 @@
-package ru.syndicate.rediexpress.ui.screens.forgot_password_screen
+package ru.syndicate.rediexpress.ui.screens.otp_verify_screen
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,41 +22,88 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import ru.syndicate.rediexpress.extensions.containsUnwantedChar
-import ru.syndicate.rediexpress.ui.common.RegisterTextField
+import ru.syndicate.rediexpress.ui.screens.otp_verify_screen.components.OTPPasswordView
 import ru.syndicate.rediexpress.ui.theme.CustomGray
 import ru.syndicate.rediexpress.ui.theme.MainBlue
 import ru.syndicate.rediexpress.ui.theme.TextBlack
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
-fun ForgotPasswordScreen(
+fun OTPVerifyScreen(
     modifier: Modifier = Modifier,
-    navigateToOTP: () -> Unit = { },
-    navigateToBack: () -> Unit = { }
+    navigateToNewPassword: () -> Unit = { }
 ) {
 
     val context = LocalContext.current
 
     val scrollState = rememberScrollState()
 
-    var emailText by remember {
-        mutableStateOf("")
+    val isOtpTrue = remember {
+        mutableStateOf(false)
     }
+
+    val textList = listOf(
+        mutableStateOf(
+            TextFieldValue(
+                text = "",
+                selection = TextRange(0)
+            )
+        ),
+        mutableStateOf(
+            TextFieldValue(
+                text = "",
+                selection = TextRange(0)
+            )
+        ),
+        mutableStateOf(
+            TextFieldValue(
+                text = "",
+                selection = TextRange(0)
+            )
+        ),
+        mutableStateOf(
+            TextFieldValue(
+                text = "",
+                selection = TextRange(0)
+            )
+        ),
+        mutableStateOf(
+            TextFieldValue(
+                text = "",
+                selection = TextRange(0)
+            )
+        ),
+        mutableStateOf(
+            TextFieldValue(
+                text = "",
+                selection = TextRange(0)
+            )
+        )
+    )
+    val requesterList = listOf(
+        FocusRequester(),
+        FocusRequester(),
+        FocusRequester(),
+        FocusRequester(),
+        FocusRequester(),
+        FocusRequester()
+    )
 
     Box(
         modifier = modifier
@@ -80,7 +127,7 @@ fun ForgotPasswordScreen(
             ) {
 
                 Text(
-                    text = "Forgot Password",
+                    text = "OTP Verification",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
                     fontSize = 24.sp,
@@ -88,7 +135,7 @@ fun ForgotPasswordScreen(
                 )
 
                 Text(
-                    text = "Enter your email address",
+                    text = "Enter the 6 digit numbers sent to your email",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp,
@@ -98,83 +145,20 @@ fun ForgotPasswordScreen(
 
             Spacer(
                 modifier = Modifier
-                    .height(48.dp)
+                    .height(70.dp)
             )
 
-            Column(
+            OTPPasswordView(
                 modifier = Modifier
                     .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-
-                Text(
-                    text = "E-mail address",
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Medium,
-                    fontSize = 14.sp,
-                    color = CustomGray
-                )
-
-                RegisterTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .border(
-                            width = 1.dp,
-                            color = CustomGray,
-                            shape = RoundedCornerShape(4.dp)
-                        )
-                        .padding(
-                            horizontal = 10.dp,
-                            vertical = 14.dp
-                        ),
-                    value = emailText,
-                    hintText = "E-mail",
-                    onValueChange = {
-                        if (!it.containsUnwantedChar())
-                            emailText = it
-                    },
-                    isEmail = true
-                )
-            }
-
-            Spacer(
-                modifier = Modifier
-                    .height(64.dp)
-            )
-
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(
-                        color = MainBlue
-                    )
-                    .clickable {
-                        if (emailText.isNotEmpty())
-                            navigateToOTP()
-                        else
-                            Toast
-                                .makeText(
-                                    context,
-                                    "Entry email",
-                                    Toast.LENGTH_LONG
-                                )
-                                .show()
-                    }
-                    .padding(
-                        vertical = 15.dp
-                    ),
-                text = "Send OTP",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp,
-                textAlign = TextAlign.Center,
-                color = Color.White
+                textList = textList,
+                requesterList = requesterList,
+                isOtpTrue = isOtpTrue
             )
 
             Spacer(
                 modifier = Modifier
-                    .height(8.dp)
+                    .height(12.dp)
             )
 
             Row(
@@ -184,7 +168,7 @@ fun ForgotPasswordScreen(
             ) {
 
                 Text(
-                    text = "Remember password? Back to",
+                    text = "If you didn’t receive code,",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Normal,
                     fontSize = 14.sp,
@@ -198,9 +182,9 @@ fun ForgotPasswordScreen(
 
                 ClickableText(
                     text = AnnotatedString(
-                        text = "Log in"
+                        text = "Resend"
                     ),
-                    onClick = { navigateToBack() },
+                    onClick = {  },
                     style = TextStyle(
                         fontFamily = MaterialTheme.typography.bodyMedium.fontFamily,
                         fontWeight = FontWeight.Normal,
@@ -209,14 +193,49 @@ fun ForgotPasswordScreen(
                     )
                 )
             }
+
+            Spacer(
+                modifier = Modifier
+                    .height(84.dp)
+            )
+
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(
+                        color = MainBlue
+                    )
+                    .clickable {
+                        if (isOtpTrue.value)
+                            navigateToNewPassword()
+                        else
+                            Toast
+                                .makeText(
+                                    context,
+                                    "Problem with OTP",
+                                    Toast.LENGTH_LONG
+                                )
+                                .show()
+                    }
+                    .padding(
+                        vertical = 15.dp
+                    ),
+                text = "Set new password",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center,
+                color = Color.White
+            )
         }
     }
 }
 
 @Preview
 @Composable
-fun PreviewForgotPasswordScreen() {
-    ForgotPasswordScreen(
+fun PreviewOTPVerifyScreen() {
+    OTPVerifyScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(
