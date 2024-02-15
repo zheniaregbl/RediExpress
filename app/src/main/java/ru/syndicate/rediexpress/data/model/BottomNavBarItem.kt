@@ -17,18 +17,18 @@ sealed class BottomNavBarItem(
     data object Wallet: BottomNavBarItem(
         image = R.drawable.svg_nav_wallet,
         title = "Wallet",
-        route = ScreenRoute.HomeScreen.route
+        route = ScreenRoute.WalletScreen.route
     )
 
     data object Track: BottomNavBarItem(
         image = R.drawable.svg_nav_car,
         title = "Track",
-        route = ScreenRoute.HomeScreen.route
+        route = ScreenRoute.TrackScreen.route
     )
 
     data object Profile: BottomNavBarItem(
         image = R.drawable.svg_nav_profile,
         title = "Profile",
-        route = ScreenRoute.HomeScreen.route
+        route = ScreenRoute.ProfileScreen.route
     )
 }

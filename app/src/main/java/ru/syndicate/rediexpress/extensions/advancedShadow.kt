@@ -38,7 +38,7 @@ fun Modifier.advancedShadow(
             0f,
             0f,
             this.size.width,
-            this.size.height * 0.7f,
+            this.size.height * 0.9f,
             cornersRadius.toPx(),
             cornersRadius.toPx(),
             paint

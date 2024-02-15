@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,6 +32,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import ru.syndicate.rediexpress.data.model.BottomNavBarItem
 import ru.syndicate.rediexpress.ui.theme.CustomGray
 import ru.syndicate.rediexpress.ui.theme.MainBlue
@@ -40,6 +41,7 @@ import ru.syndicate.rediexpress.ui.theme.MainBlue
 @Composable
 fun BottomNavBar(
     modifier: Modifier = Modifier,
+    navController: NavHostController,
     selectedItemIndex: MutableState<Int> = mutableIntStateOf(0)
 ) {
 
@@ -90,6 +92,9 @@ fun BottomNavBar(
                             if (selectedItemIndex.value != items.indexOf(items[index])) {
 
                                 selectedItemIndex.value = items.indexOf(items[index])
+                                navController.navigate(items[selectedItemIndex.value].route) {
+                                    popUpTo(0)
+                                }
                             }
                         }
                         .width(45.dp)
@@ -149,7 +154,8 @@ fun BottomNavNavItem(
 fun PreviewBottomNavBar() {
     BottomNavBar(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
+        navController = rememberNavController()
     )
 }
 

@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import ru.syndicate.rediexpress.R
 import ru.syndicate.rediexpress.data.model.ServiceItem
 import ru.syndicate.rediexpress.extensions.containsUnwantedChar
+import ru.syndicate.rediexpress.navigation.ScreenRoute
 import ru.syndicate.rediexpress.ui.screens.home_screen.components.SearchLine
 import ru.syndicate.rediexpress.ui.screens.home_screen.components.ServiceCard
 import ru.syndicate.rediexpress.ui.theme.CustomOrange
@@ -51,7 +52,8 @@ import ru.syndicate.rediexpress.ui.theme.TextHint
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    navigateToNotification: () -> Unit = { }
+    navigateToNotification: () -> Unit = { },
+    navigateToService: (String) -> Unit = { }
 ) {
 
     var searchText by remember {
@@ -67,22 +69,26 @@ fun HomeScreen(
         ServiceItem(
             image = R.drawable.svg_head,
             title = "Customer Care",
-            description = "Our customer care service line is available from 8 -9pm week days and 9 - 5 weekends - tap to call us today"
+            description = "Our customer care service line is available from 8 -9pm week days and 9 - 5 weekends - tap to call us today",
+            route = ScreenRoute.HomeScreen.route
         ),
         ServiceItem(
             image = R.drawable.svg_box,
             title = "Send a package",
-            description = "Request for a driver to pick up or deliver your package for you"
+            description = "Request for a driver to pick up or deliver your package for you",
+            route = ScreenRoute.EnterPackageInfoScreen.route
         ),
         ServiceItem(
             image = R.drawable.svg_wallet,
             title = "Fund your wallet",
-            description = "To fund your wallet is as easy as ABC, make use of our fast technology and top-up your wallet today"
+            description = "To fund your wallet is as easy as ABC, make use of our fast technology and top-up your wallet today",
+            route = ScreenRoute.WalletScreen.route
         ),
         ServiceItem(
             image = R.drawable.svg_car,
             title = "Book a Rider",
-            description = "Search for available driver within your area"
+            description = "Search for available driver within your area",
+            route = ScreenRoute.BookRiderScreen.route
         )
     )
 
@@ -243,7 +249,7 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.spacedBy(24.dp)
             ) {
 
-                items((listService.size + 1) / 2) { i ->
+                item {
 
                     Row(
                         modifier = Modifier
@@ -252,22 +258,64 @@ fun HomeScreen(
                         horizontalArrangement = Arrangement.spacedBy(24.dp)
                     ) {
 
-                        for (j in 0 until 2) {
-
-                            val index = i * 2 + j
-
-                            if (index < listService.size) {
-
-                                ServiceCard(
-                                    modifier = Modifier
-                                        .fillMaxHeight()
-                                        .weight(1f),
-                                    image = listService[index].image,
-                                    title = listService[index].title,
-                                    description = listService[index].description
-                                )
+                        ServiceCard(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .weight(1f),
+                            image = listService[0].image,
+                            title = listService[0].title,
+                            description = listService[0].description,
+                            onClick = {
+                                navigateToService(listService[0].route)
                             }
-                        }
+                        )
+
+                        ServiceCard(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .weight(1f),
+                            image = listService[1].image,
+                            title = listService[1].title,
+                            description = listService[1].description,
+                            onClick = {
+                                navigateToService(listService[1].route)
+                            }
+                        )
+                    }
+                }
+
+                item {
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(IntrinsicSize.Max),
+                        horizontalArrangement = Arrangement.spacedBy(24.dp)
+                    ) {
+
+                        ServiceCard(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .weight(1f),
+                            image = listService[2].image,
+                            title = listService[2].title,
+                            description = listService[2].description,
+                            onClick = {
+                                navigateToService(listService[2].route)
+                            }
+                        )
+
+                        ServiceCard(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .weight(1f),
+                            image = listService[3].image,
+                            title = listService[3].title,
+                            description = listService[3].description,
+                            onClick = {
+                                navigateToService(listService[3].route)
+                            }
+                        )
                     }
                 }
 

@@ -37,7 +37,8 @@ fun ServiceCard(
     image: Int = R.drawable.svg_head,
     title: String = "Customer Care",
     description: String = "Our customer care service line is available" +
-            " from 8 -9pm week days and 9 - 5 weekends - tap to call us today"
+            " from 8 -9pm week days and 9 - 5 weekends - tap to call us today",
+    onClick: () -> Unit = { }
 ) {
 
     val interactionSource = remember { MutableInteractionSource() }
@@ -53,7 +54,7 @@ fun ServiceCard(
                 interactionSource = interactionSource,
                 indication = null
             ) {
-
+                onClick()
             }
             .padding(
                 start = 12.dp,

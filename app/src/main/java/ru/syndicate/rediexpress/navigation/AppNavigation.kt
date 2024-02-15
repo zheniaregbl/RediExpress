@@ -1,7 +1,7 @@
 package ru.syndicate.rediexpress.navigation
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,19 +15,28 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.yandex.mapkit.mapview.MapView
 import ru.syndicate.rediexpress.ui.bottom_nav_bar.BottomNavBar
+import ru.syndicate.rediexpress.view_model.send_package_view_model.SendPackageViewModel
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @Composable
 fun AppNavigation(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    mapView: MapView
 ) {
 
+    val sendPackageViewModel = hiltViewModel<SendPackageViewModel>()
+
     val routeList = listOf(
-        ScreenRoute.HomeScreen.route
+        ScreenRoute.HomeScreen.route,
+        ScreenRoute.WalletScreen.route,
+        ScreenRoute.TrackScreen.route,
+        ScreenRoute.ProfileScreen.route
     )
 
     val showNavigationMenu = navController
@@ -43,22 +52,13 @@ fun AppNavigation(
         bottomBar = {
 
             if (showNavigationMenu)
-                Column(
+                BottomNavBar(
                     modifier = Modifier
                         .fillMaxWidth()
-                ) {
-
-                    BottomNavBar(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        selectedItemIndex = selectedItemIndex
-                    )
-
-                    Spacer(
-                        modifier = Modifier
-                            .navigationBarsPadding()
-                    )
-                }
+                        .navigationBarsPadding(),
+                    navController = navController,
+                    selectedItemIndex = selectedItemIndex
+                )
         },
         contentWindowInsets = WindowInsets.systemBars
     ) { paddingValues ->
@@ -71,7 +71,18 @@ fun AppNavigation(
         ) {
 
             AppNavGraph(
-                navController = navController
+                navController = navController,
+                sendPackageViewModel = sendPackageViewModel,
+                mapView = mapView,
+                routeList = routeList,
+                navigateTo = {
+
+                    selectedItemIndex.intValue = routeList.indexOf(it)
+
+                    navController.navigate(it) {
+                        popUpTo(0)
+                    }
+                }
             )
         }
     }

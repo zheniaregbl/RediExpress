@@ -1,7 +1,8 @@
 package ru.syndicate.rediexpress.ui.screens.send_package_screen.components
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,27 +12,24 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.LocalTextSelectionColors
 import androidx.compose.foundation.text.selection.TextSelectionColors
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.graphics.drawscope.clipRect
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import ru.syndicate.rediexpress.extensions.advancedShadow
+import ru.syndicate.rediexpress.ui.common.PhoneNumberTransformation
 import ru.syndicate.rediexpress.ui.theme.MainBlue
 import ru.syndicate.rediexpress.ui.theme.TextBlack
 import ru.syndicate.rediexpress.ui.theme.TextHint
@@ -42,6 +40,8 @@ fun PackageTextField(
     value: String = "",
     hintText: String = "",
     onValueChange: (String) -> Unit = { },
+    isPhone: Boolean = false,
+    isNumbers: Boolean = false
 ) {
 
     val customTextSelectionColors = TextSelectionColors(
@@ -60,9 +60,11 @@ fun PackageTextField(
             color = TextBlack
         ),
         singleLine = true,
+        visualTransformation = if (isPhone) PhoneNumberTransformation("+ # ### ### ## ##")
+            else VisualTransformation.None,
         cursorBrush = SolidColor(MainBlue),
         keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password
+            keyboardType = if (isPhone || isNumbers) KeyboardType.Number else KeyboardType.Password
         )
     ) { innerTextField ->
 
@@ -101,6 +103,7 @@ fun PackageTextField(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.Q)
 @Preview(
     showBackground = true
 )
